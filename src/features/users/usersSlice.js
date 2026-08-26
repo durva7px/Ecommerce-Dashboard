@@ -1,0 +1,4 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+export const fetchUsers = createAsyncThunk('users/fetchUsers', async (_, { rejectWithValue }) => { try { const response = await fetch('https://dummyjson.com/users?limit=100'); if (!response.ok) throw new Error('Unable to load users'); return response.json() } catch (error) { return rejectWithValue(error.message) } })
+const slice = createSlice({ name: 'users', initialState: { items: [], status: 'idle', error: '' }, reducers: {}, extraReducers: (builder) => builder.addCase(fetchUsers.pending, (state) => { state.status = 'loading' }).addCase(fetchUsers.fulfilled, (state, action) => { state.status = 'succeeded'; state.items = action.payload.users }).addCase(fetchUsers.rejected, (state, action) => { state.status = 'failed'; state.error = action.payload }) })
+export default slice.reducer

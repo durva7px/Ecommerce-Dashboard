@@ -1,0 +1,4 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+export const fetchOrders = createAsyncThunk('orders/fetchOrders', async (_, { rejectWithValue }) => { try { const response = await fetch('https://dummyjson.com/carts?limit=100'); if (!response.ok) throw new Error('Unable to load orders'); return response.json() } catch (error) { return rejectWithValue(error.message) } })
+const slice = createSlice({ name: 'orders', initialState: { items: [], status: 'idle', error: '' }, reducers: {}, extraReducers: (builder) => builder.addCase(fetchOrders.pending, (state) => { state.status = 'loading' }).addCase(fetchOrders.fulfilled, (state, action) => { state.status = 'succeeded'; state.items = action.payload.carts }).addCase(fetchOrders.rejected, (state, action) => { state.status = 'failed'; state.error = action.payload }) })
+export default slice.reducer
