@@ -1,0 +1,10 @@
+import { useState } from 'react'
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Stack, TextField } from '@mui/material'
+
+const ProductDialog = ({ value, categories, close, save }) => {
+  const [form, setForm] = useState(value || {})
+  const update = (key, next) => setForm((current) => ({ ...current, [key]: next }))
+  return <Dialog open={!!value} onClose={close} fullWidth maxWidth="sm"><DialogTitle>{value?.id ? 'Edit product' : 'Add product'}</DialogTitle><DialogContent><Stack spacing={2} sx={{ pt: 1 }}><TextField label="Title" value={form.title || ''} onChange={(event) => update('title', event.target.value)} autoFocus /><TextField label="Description" multiline minRows={2} value={form.description || ''} onChange={(event) => update('description', event.target.value)} /><TextField label="Category" value={form.category || ''} onChange={(event) => update('category', event.target.value)} select>{categories.map((category) => <MenuItem key={category} value={category}>{category}</MenuItem>)}</TextField><Stack direction="row" spacing={2}><TextField fullWidth label="Price" type="number" value={form.price || ''} onChange={(event) => update('price', Number(event.target.value))} /><TextField fullWidth label="Stock" type="number" value={form.stock || ''} onChange={(event) => update('stock', Number(event.target.value))} /></Stack><Stack direction="row" spacing={2}><TextField fullWidth label="Rating" type="number" value={form.rating || ''} onChange={(event) => update('rating', Number(event.target.value))} /><TextField fullWidth label="Brand" value={form.brand || ''} onChange={(event) => update('brand', event.target.value)} /></Stack><TextField label="Image URL" value={form.image || form.thumbnail || ''} onChange={(event) => update('image', event.target.value)} /></Stack></DialogContent><DialogActions><Button onClick={close}>Cancel</Button><Button variant="contained" onClick={() => save(form)} disabled={!form.title}>Save product</Button></DialogActions></Dialog>
+}
+
+export default ProductDialog
